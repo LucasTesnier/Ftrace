@@ -19,7 +19,7 @@ int ftrace_start(int ac, char **av)
 {
     switch (ftrace_error_handling(ac, av)) {
     case WRONG_ARGUMENTS_NUMBERS:
-        return -84;
+        return 84;
     case USAGE:
         return 0;
     default:
