@@ -16,5 +16,5 @@
 */
 int main(int ac, char **av)
 {
-
+    return ftrace_start(ac, av);
 }
