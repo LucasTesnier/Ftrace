@@ -8,8 +8,9 @@
 #include "ftrace_error_handling.h"
 
 /**
-*@brief display the ftrace usage
+*@brief display the message for ftrace
 *
+*@param code code corresponding to the message
 */
 static void display_messages(int code)
 {
