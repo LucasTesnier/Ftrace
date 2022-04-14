@@ -5,7 +5,7 @@
 ** main
 */
 
-#include "ftrace_init.h"
+#include "ftrace_start.h"
 
 /**
 *@brief main function
