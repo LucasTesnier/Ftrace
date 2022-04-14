@@ -45,7 +45,7 @@ Elf *elf_open_file(file_descriptor fd, char *path)
     }
     elf_file = elf_begin(fd, ELF_C_READ, NULL);
     if (elf_file == NULL) {
-       errx (EX_SOFTWARE, "elf_begin() failed: %s." , elf_errmsg(-1)); 
+        errx(EX_SOFTWARE, "elf_begin() failed: %s.", elf_errmsg(-1));
         return NULL;
     }
     if (elf_kind(elf_file) != ELF_K_ELF) {
