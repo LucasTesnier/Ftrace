@@ -14,6 +14,12 @@
 #include <sys/mman.h>
 #include <sysexits.h>
 
+/**
+*@brief init the ELF info structure
+*
+*@param path
+*@return elf_info_t*
+*/
 elf_info_t *elf_info_init(char *path)
 {
     elf_info_t *elf_info = malloc(sizeof(elf_info_t) * 1);
@@ -34,6 +40,13 @@ elf_info_t *elf_info_init(char *path)
     return elf_info;
 }
 
+/**
+*@brief open the file and load into an ELF file
+*
+*@param fd
+*@param path
+*@return Elf*
+*/
 Elf *elf_open_file(file_descriptor fd, char *path)
 {
     Elf *elf_file = NULL;
@@ -55,6 +68,11 @@ Elf *elf_open_file(file_descriptor fd, char *path)
     return elf_file;
 }
 
+/**
+*@brief destroy the elf_info structure
+*
+*@param elf_info
+*/
 void elf_info_destroy(elf_info_t *elf_info)
 {
     munmap(elf_info->buf, elf_info->size.st_size);
