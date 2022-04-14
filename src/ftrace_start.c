@@ -7,6 +7,8 @@
 
 #include "ftrace_start.h"
 #include "ftrace_error_handling.h"
+#include "elf_open.h"
+#include <stddef.h>
 
 /**
 *@brief start the ftrace process
@@ -17,6 +19,8 @@
 */
 int ftrace_start(int ac, char **av)
 {
+    elf_info_t *elf_info = NULL;
+
     switch (ftrace_error_handling(ac, av)) {
     case WRONG_ARGUMENTS_NUMBERS:
         return 84;
@@ -25,5 +29,9 @@ int ftrace_start(int ac, char **av)
     default:
         break;
     }
+    elf_info = elf_info_init(av[1]);
+    if (elf_info == NULL)
+        return 84;
+    elf_info_destroy(elf_info);
     return 0;
 }

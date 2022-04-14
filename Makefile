@@ -10,22 +10,26 @@ CC 		= 	gcc
 MAIN	=	src/main.c
 
 FILES	=	src/ftrace_start.c 				\
-			src/ftrace_error_handling.c 	\
+			src/ftrace_error_handling.c
+
+ELFLIB	=	src/elf_lib/elf_open.c
 
 SRC 	=	$(MAIN)		\
-			$(FILES)
+			$(FILES)	\
+			$(ELFLIB)
 
 RM 		= 	rm -f
 
 NAME 	= 	ftrace
 
-CFLAGS 	= 	-Wall -Werror -I include/
+CFLAGS 	= 	-Wall -Werror -I include/ -lelf
 
 OBJ		=	$(SRC:.c=.o)
 
 T_FILES	=	tests/ftrace_tests.c			\
 
 SRC_T	=	$(FILES)	\
+			$(ELFLIB)	\
 			$(T_FILES)
 
 TFLAGS	=	-lcriterion --coverage
