@@ -9,16 +9,19 @@ CC 		= 	gcc
 
 MAIN	=	src/main.c
 
+ELFLIB	=	src/elf_lib/elf_open.c
+
 FILES	=	src/ftrace_init.c 		\
 
 SRC 	=	$(MAIN)		\
-			$(FILES)
+			$(FILES)	\
+			$(ELFLIB)
 
 RM 		= 	rm -f
 
 NAME 	= 	ftrace
 
-CFLAGS 	= 	-Wall -Werror -I include/
+CFLAGS 	= 	-Wall -Werror -I include/ -lelf
 
 OBJ		=	$(SRC:.c=.o)
 
