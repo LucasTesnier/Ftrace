@@ -9,7 +9,8 @@ CC 		= 	gcc
 
 MAIN	=	src/main.c
 
-FILES	=	src/ftrace_start.c 		\
+FILES	=	src/ftrace_start.c 				\
+			src/ftrace_error_handling.c 	\
 
 SRC 	=	$(MAIN)		\
 			$(FILES)
