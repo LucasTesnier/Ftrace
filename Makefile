@@ -9,7 +9,7 @@ CC 		= 	gcc
 
 MAIN	=	src/main.c
 
-FILES	=	src/ftrace_init.c 		\
+FILES	=	src/ftrace_start.c 		\
 
 SRC 	=	$(MAIN)		\
 			$(FILES)
