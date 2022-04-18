@@ -18,6 +18,12 @@
 #include <string.h>
 #include <stdio.h>
 
+/**
+*@brief init the elf_adress structure
+*
+*@param elf_info
+*@return elf_adress_t*
+*/
 elf_adress_t *init_elf_adress(elf_info_t *elf_info)
 {
     elf_adress_t *elf_adress = malloc(sizeof(elf_adress_t) * 1);
@@ -36,6 +42,14 @@ elf_adress_t *init_elf_adress(elf_info_t *elf_info)
     return elf_adress;
 }
 
+/**
+*@brief fill the elf adress structure (match the str and sym tab)
+*
+*@param elf_info
+*@param elf_adress
+*@param shstrndx
+*@return int
+*/
 int fill_elf_adress(elf_info_t *elf_info, elf_adress_t *elf_adress,
 size_t shstrndx)
 {
@@ -61,6 +75,13 @@ size_t shstrndx)
     return ELF_ADRESS_SUCCESS;
 }
 
+/**
+*@brief return the matching name for the given adress in an ELF file
+*
+*@param elf_info
+*@param adress
+*@return char*
+*/
 char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress)
 {
     elf_adress_t *elf_adress = init_elf_adress(elf_info);
