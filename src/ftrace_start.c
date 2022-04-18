@@ -41,8 +41,7 @@ char *arg, char **env)
 */
 static void destroy_structs(elf_info_t *elf_info, trace_data_t *trace_data)
 {
-    (void)elf_info;
-    //elf_info_destroy(elf_info);
+    elf_info_destroy(elf_info);
     trace_data_destroy(trace_data);
 }
 
