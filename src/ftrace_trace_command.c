@@ -6,6 +6,7 @@
 */
 
 #include "ftrace_trace_command.h"
+#include "ftrace_prepare_command.h"
 #include <string.h>
 
 /**
@@ -26,14 +27,14 @@ void trace_data_destroy(trace_data_t *trace_data)
 *@param command
 *@return trace_data_t*
 */
-trace_data_t *trace_data_create(char *command)
+trace_data_t *trace_data_create(char *command, char **env)
 {
     trace_data_t *trace_data = malloc(sizeof(trace_data_t));
 
     if (!trace_data)
         return NULL;
     trace_data->raw_command = strdup(command);
-    // trace_data->complete_command = prepare_command(command);
+    //trace_data->complete_command = prepare_command(command, env);
     if (!trace_data->raw_command || !trace_data->complete_command) {
         free(trace_data);
         return NULL;

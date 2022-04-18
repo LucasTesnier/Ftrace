@@ -18,6 +18,6 @@ typedef struct trace_data_s {
 } trace_data_t;
 
 void trace_data_destroy(trace_data_t *trace_data);
-trace_data_t *trace_data_create(char *command);
+trace_data_t *trace_data_create(char *command, char **env);
 
 #endif /* !TRACE_COMMAND_H_ */

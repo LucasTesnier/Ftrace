@@ -19,9 +19,10 @@
 * @param arg
 * @return int
 */
-int init_structs(elf_info_t *elf_info, trace_data_t *trace_data, char *arg)
+static int init_structs(elf_info_t *elf_info, trace_data_t *trace_data,
+char *arg, char **env)
 {
-    trace_data = trace_data_create(arg);
+    trace_data = trace_data_create(arg, env);
     if (!trace_data)
         return -1;
     elf_info = elf_info_init(arg);
@@ -36,7 +37,7 @@ int init_structs(elf_info_t *elf_info, trace_data_t *trace_data, char *arg)
 *@param elf_info
 *@param trace_data
 */
-void destroy_structs(elf_info_t *elf_info, trace_data_t *trace_data)
+static void destroy_structs(elf_info_t *elf_info, trace_data_t *trace_data)
 {
     elf_info_destroy(elf_info);
     trace_data_destroy(trace_data);
@@ -49,7 +50,7 @@ void destroy_structs(elf_info_t *elf_info, trace_data_t *trace_data)
 *@param av
 *@return int
 */
-int ftrace_start(int ac, char **av)
+int ftrace_start(int ac, char **av, char **env)
 {
     elf_info_t *elf_info = NULL;
     trace_data_t *trace_data = NULL;
@@ -62,7 +63,7 @@ int ftrace_start(int ac, char **av)
     default:
         break;
     }
-    if (init_structs(elf_info, trace_data, av[1]))
+    if (init_structs(elf_info, trace_data, av[1], env))
         return 84;
     destroy_structs(elf_info, trace_data);
     return 0;
