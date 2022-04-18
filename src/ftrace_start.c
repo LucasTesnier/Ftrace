@@ -19,15 +19,15 @@
 * @param arg
 * @return int
 */
-static int init_structs(elf_info_t *elf_info, trace_data_t *trace_data,
+static int init_structs(elf_info_t **elf_info, trace_data_t **trace_data,
 char *arg, char **env)
 {
-    trace_data = trace_data_create(arg, env);
+    *trace_data = trace_data_create(arg, env);
     if (!trace_data)
         return -1;
-    elf_info = elf_info_init(arg);
-    if (elf_info == NULL) {
-        trace_data_destroy(trace_data);
+    *elf_info = elf_info_init(arg);
+    if (*elf_info == NULL) {
+        trace_data_destroy(*trace_data);
         return -1;
     }
     return 0;
@@ -41,7 +41,8 @@ char *arg, char **env)
 */
 static void destroy_structs(elf_info_t *elf_info, trace_data_t *trace_data)
 {
-    elf_info_destroy(elf_info);
+    (void)elf_info;
+    //elf_info_destroy(elf_info);
     trace_data_destroy(trace_data);
 }
 
@@ -66,7 +67,7 @@ int ftrace_start(int ac, char **av, char **env)
     default:
         break;
     }
-    if (init_structs(elf_info, trace_data, av[1], env))
+    if (init_structs(&elf_info, &trace_data, av[1], env))
         return 84;
     res = ftrace_trace_command(trace_data);
     destroy_structs(elf_info, trace_data);
