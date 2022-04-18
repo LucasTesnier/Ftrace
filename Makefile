@@ -11,7 +11,11 @@ MAIN	=	src/main.c
 
 FILES	=	src/ftrace_start.c 				\
 			src/ftrace_error_handling.c		\
-			src/utils.c
+			src/utils.c						\
+			src/ftrace_trace_command.c 		\
+			src/ftrace_prepare_command.c 	\
+			src/ftrace_prepare_path.c 		\
+			src/ftrace_signals.c 			\
 
 ELFLIB	=	src/elf_lib/elf_open.c		\
 			src/elf_lib/elf_adress.c
@@ -61,7 +65,7 @@ tests_run:
 	gcovr --exclude tests/
 	gcovr --exclude tests/ --branches
 
-dbg: CFLAGS = -g -I include/
+dbg: CFLAGS = -g -I include/ -lelf
 dbg: re
 
 .PHONY: all clean fclean re dbg tests_run

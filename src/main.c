@@ -14,7 +14,7 @@
 *@param av
 *@return int
 */
-int main(int ac, char **av)
+int main(int ac, char **av, char **env)
 {
-    return ftrace_start(ac, av);
+    return ftrace_start(ac, av, env);
 }
