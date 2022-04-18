@@ -10,7 +10,8 @@ CC 		= 	gcc
 MAIN	=	src/main.c
 
 FILES	=	src/ftrace_start.c 				\
-			src/ftrace_error_handling.c
+			src/ftrace_error_handling.c		\
+			src/ftrace_trace_command.c 		\
 
 ELFLIB	=	src/elf_lib/elf_open.c
 
