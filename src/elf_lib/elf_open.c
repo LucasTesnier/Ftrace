@@ -27,8 +27,10 @@ elf_info_t *elf_info_init(char *path)
     if (elf_info == NULL)
         return NULL;
     elf_info->fd = open(path, O_RDONLY);
-    if (elf_info->fd == OPEN_ERROR)
+    if (elf_info->fd == OPEN_ERROR) {
+        free(elf_info);
         return NULL;
+    }
     fstat(elf_info->fd, &(elf_info->size));
     elf_info->buf = mmap(NULL, elf_info->size.st_size, PROT_READ,
     MAP_PRIVATE, elf_info->fd, 0);
@@ -47,7 +49,7 @@ elf_info_t *elf_info_init(char *path)
 *@param path
 *@return Elf*
 */
-Elf *elf_open_file(file_descriptor fd, char *path)
+Elf *elf_open_file(file_descriptor_t fd, char *path)
 {
     Elf *elf_file = NULL;
 

@@ -9,9 +9,16 @@ CC 		= 	gcc
 
 MAIN	=	src/main.c
 
-ELFLIB	=	src/elf_lib/elf_open.c
+FILES	=	src/ftrace_start.c 				\
+			src/ftrace_error_handling.c		\
+			src/utils.c						\
+			src/ftrace_trace_command.c 		\
+			src/ftrace_prepare_command.c 	\
+			src/ftrace_prepare_path.c 		\
+			src/ftrace_signals.c 			\
 
-FILES	=	src/ftrace_init.c 		\
+ELFLIB	=	src/elf_lib/elf_open.c		\
+			src/elf_lib/elf_adress.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)	\
@@ -28,6 +35,7 @@ OBJ		=	$(SRC:.c=.o)
 T_FILES	=	tests/ftrace_tests.c			\
 
 SRC_T	=	$(FILES)	\
+			$(ELFLIB)	\
 			$(T_FILES)
 
 TFLAGS	=	-lcriterion --coverage
@@ -57,7 +65,7 @@ tests_run:
 	gcovr --exclude tests/
 	gcovr --exclude tests/ --branches
 
-dbg: CFLAGS = -g -I include/
+dbg: CFLAGS = -g -I include/ -lelf
 dbg: re
 
 .PHONY: all clean fclean re dbg tests_run
