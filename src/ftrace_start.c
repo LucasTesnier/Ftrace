@@ -26,8 +26,10 @@ char *arg, char **env)
     if (!trace_data)
         return -1;
     elf_info = elf_info_init(arg);
-    if (elf_info == NULL)
+    if (elf_info == NULL) {
+        trace_data_destroy(trace_data);
         return -1;
+    }
     return 0;
 }
 

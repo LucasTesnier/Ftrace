@@ -16,9 +16,12 @@
 */
 void trace_data_destroy(trace_data_t *trace_data)
 {
-    free(trace_data->raw_command);
-    free(trace_data->complete_command);
-    free(trace_data);
+    if (trace_data->raw_command)
+        free(trace_data->raw_command);
+    if (trace_data->complete_command)
+        free(trace_data->complete_command);
+    if (trace_data)
+        free(trace_data);
 }
 
 /**
@@ -34,8 +37,11 @@ trace_data_t *trace_data_create(char *command, char **env)
     if (!trace_data)
         return NULL;
     trace_data->raw_command = strdup(command);
-    //trace_data->complete_command = prepare_command(command, env);
-    if (!trace_data->raw_command || !trace_data->complete_command) {
+    if (!trace_data->raw_command)
+        return NULL;
+    trace_data->complete_command = prepare_command(command, env);
+    if (!trace_data->complete_command) {
+        free(trace_data->raw_command);
         free(trace_data);
         return NULL;
     }
