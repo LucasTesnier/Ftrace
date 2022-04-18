@@ -19,5 +19,6 @@ typedef struct trace_data_s {
 
 void trace_data_destroy(trace_data_t *trace_data);
 trace_data_t *trace_data_create(char *command, char **env);
+int ftrace_trace_command(trace_data_t *trace_data);
 
 #endif /* !TRACE_COMMAND_H_ */

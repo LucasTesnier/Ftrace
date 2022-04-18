@@ -56,6 +56,7 @@ int ftrace_start(int ac, char **av, char **env)
 {
     elf_info_t *elf_info = NULL;
     trace_data_t *trace_data = NULL;
+    int res = 0;
 
     switch (ftrace_error_handling(ac, av)) {
     case WRONG_ARGUMENTS_NUMBERS:
@@ -67,6 +68,7 @@ int ftrace_start(int ac, char **av, char **env)
     }
     if (init_structs(elf_info, trace_data, av[1], env))
         return 84;
+    res = ftrace_trace_command(trace_data);
     destroy_structs(elf_info, trace_data);
-    return 0;
+    return res;
 }
