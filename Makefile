@@ -10,9 +10,11 @@ CC 		= 	gcc
 MAIN	=	src/main.c
 
 FILES	=	src/ftrace_start.c 				\
-			src/ftrace_error_handling.c
+			src/ftrace_error_handling.c		\
+			src/utils.c
 
-ELFLIB	=	src/elf_lib/elf_open.c
+ELFLIB	=	src/elf_lib/elf_open.c		\
+			src/elf_lib/elf_adress.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)	\
