@@ -12,6 +12,7 @@
     #include <sys/ptrace.h>
     #include <sys/wait.h>
     #include <sys/user.h>
+    #include "ftrace_syscall.h"
 
 void next_signal(int *status, pid_t pid, struct user_regs_struct *regs);
 void fill_actual_signal_with_regs_value(struct user_regs_struct regs,

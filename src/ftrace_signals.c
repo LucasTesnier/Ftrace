@@ -11,7 +11,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <signal.h>
-#include "ftrace_syscall.h"
 
 /**
 *@brief move to the next signal

@@ -93,13 +93,16 @@ int ftrace_display_command(trace_data_t *trace_data)
 */
 int ftrace_trace_command(trace_data_t *trace_data)
 {
+    char *args[2] = {trace_data->raw_command, NULL};
+
+    (void)table;
     trace_data->pid = fork();
     if (trace_data->pid == -1)
         return -1;
     if (trace_data->pid == 0) {
         ptrace(PTRACE_TRACEME, 0, NULL, NULL);
         kill(getpid(), SIGSTOP);
-        execvp(trace_data->raw_command, NULL);
+        execvp(trace_data->raw_command, args);
         return 0;
     } else {
         ftrace_display_command(trace_data);
