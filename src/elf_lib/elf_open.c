@@ -47,7 +47,7 @@ elf_info_t *elf_info_init(char *path)
 *@param path
 *@return Elf*
 */
-Elf *elf_open_file(file_descriptor fd, char *path)
+Elf *elf_open_file(file_descriptor_t fd, char *path)
 {
     Elf *elf_file = NULL;
 
