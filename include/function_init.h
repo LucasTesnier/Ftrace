@@ -19,11 +19,6 @@ typedef struct function_s {
     char *address;
 } function_t;
 
-typedef struct stack_s {
-    function_t *prev;
-    function_t *function;
-} stack_t;
-
 function_t *init_function(elf_info_t *elf_info, trace_data_t *trace_data,
 char *adress);
 char *create_unknown_name(trace_data_t *trace_data, char *adress);
