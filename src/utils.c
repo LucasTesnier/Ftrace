@@ -7,6 +7,7 @@
 
 #include "utils.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
 *@brief convert hex number to decimal
@@ -17,4 +18,15 @@
 int hex_to_dec(char *adress)
 {
     return ((int)strtol(adress, NULL, 16));
+}
+
+char *dec_to_hex(long long int adress)
+{
+    char *new = malloc(sizeof(char) * 18);
+
+    new[0] = '\0';
+    sprintf(new, "%llx", adress);
+
+    //printf("OLD : %lli, New : %s\n", adress, new);
+    return new;
 }

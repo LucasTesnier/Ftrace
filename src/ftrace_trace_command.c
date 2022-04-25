@@ -9,6 +9,9 @@
 #include "ftrace_prepare_command.h"
 #include "ftrace_syscall.h"
 #include "ftrace_signals.h"
+#include "function_init.h"
+#include "function_stack.h"
+#include "utils.h"
 #include <string.h>
 #include <sys/ptrace.h>
 #include <unistd.h>
@@ -63,11 +66,13 @@ trace_data_t *trace_data_create(char *command, char **env)
 *@param trace_data
 *@return int
 */
-int ftrace_display_command(trace_data_t *trace_data)
+int ftrace_display_command(trace_data_t *trace_data, elf_info_t *elf_info)
 {
     struct user_regs_struct regs;
     syscall_t actual_signal;
     int status = 0;
+    function_t *function = NULL;
+    f_stack_t *stack = init_function_stack();
 
     waitpid(trace_data->pid, &status, 0);
     while (true) {
@@ -79,9 +84,23 @@ int ftrace_display_command(trace_data_t *trace_data)
             matching_actual_signal_with_signal_table(&actual_signal);
             display_actual_signal(actual_signal);
         }
+        if ((temp & 0xff) == 0xc3 || (temp & 0xff) == 0xcb || (temp & 0xff) == 0xc2 || (temp & 0xff) == 0xca) {
+            if (stack->bottom != NULL) {
+                printf("Leaving function %s\n", pop_last_function(stack));
+            }
+        }
+        if ((temp & 0xff) == 0xE8) {
+            char *a = dec_to_hex(regs.rip + 5 + (temp >> 8));
+            if (strlen(a) == 6) {
+                function = init_function(elf_info, trace_data, a);
+                printf("Entering function %s at 0x%s\n", function->name, function->address);
+                add_function_stack(stack, function);
+            }
+        }
         if (WIFEXITED(status) || WIFSIGNALED(status))
             break;
     }
+    destroy_function_stack(stack);
     return WEXITSTATUS(status);
 }
 
@@ -91,7 +110,7 @@ int ftrace_display_command(trace_data_t *trace_data)
 *@param trace_data
 *@return int
 */
-int ftrace_trace_command(trace_data_t *trace_data)
+int ftrace_trace_command(trace_data_t *trace_data, elf_info_t *elf_info)
 {
     char *args[2] = {trace_data->raw_command, NULL};
 
@@ -105,7 +124,7 @@ int ftrace_trace_command(trace_data_t *trace_data)
         execvp(trace_data->raw_command, args);
         return 0;
     } else {
-        ftrace_display_command(trace_data);
+        ftrace_display_command(trace_data, elf_info);
     }
     return 0;
 }
