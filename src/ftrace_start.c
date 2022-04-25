@@ -69,7 +69,7 @@ int ftrace_start(int ac, char **av, char **env)
     }
     if (init_structs(&elf_info, &trace_data, av[1], env))
         return 84;
-    res = ftrace_trace_command(trace_data);
+    res = ftrace_trace_command(trace_data, elf_info);
     destroy_structs(elf_info, trace_data);
     return res;
 }

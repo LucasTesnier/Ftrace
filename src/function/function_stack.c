@@ -7,10 +7,11 @@
 
 #include "function_stack.h"
 #include <string.h>
+#include <stdio.h>
 
-stack_t *init_function_stack(void)
+f_stack_t *init_function_stack(void)
 {
-    stack_t *new_stack = malloc(sizeof(stack_t) * 1);
+    f_stack_t *new_stack = malloc(sizeof(f_stack_t) * 1);
 
     if (new_stack == ERROR_MALLOC)
         return ERROR_MALLOC;
@@ -18,7 +19,7 @@ stack_t *init_function_stack(void)
     return new_stack;
 }
 
-void add_function_stack(stack_t *stack, function_t *function)
+void add_function_stack(f_stack_t *stack, function_t *function)
 {
     node_t *new = malloc(sizeof(node_t) * 1);
     node_t *ptr = stack->bottom;
@@ -36,9 +37,10 @@ void add_function_stack(stack_t *stack, function_t *function)
     ptr->prev = new;
 }
 
-char *pop_last_function(stack_t *stack)
+char *pop_last_function(f_stack_t *stack)
 {
     node_t *ptr = stack->bottom;
+    node_t *s = NULL;
     char *save = NULL;
 
     if (ptr == NULL)
@@ -49,8 +51,11 @@ char *pop_last_function(stack_t *stack)
         stack->bottom = NULL;
         return save;
     }
-    while (ptr->prev != NULL)
+    while (ptr->prev != NULL) {
+        s = ptr;
         ptr = ptr->prev;
+    }
+    s->prev = NULL;
     save = strdup(ptr->function->name);
     destroy_node(ptr);
     return save;
@@ -64,7 +69,7 @@ void destroy_node(node_t *node)
     free(node);
 }
 
-void destroy_function_stack(stack_t *stack)
+void destroy_function_stack(f_stack_t *stack)
 {
     if (stack->bottom != NULL)
         destroy_node(stack->bottom);
