@@ -17,12 +17,15 @@ FILES	=	src/ftrace_start.c 				\
 			src/ftrace_prepare_path.c 		\
 			src/ftrace_signals.c 			\
 
-ELFLIB	=	src/elf_lib/elf_open.c		\
+ELFLIB	=	src/elf_lib/elf_open.c			\
 			src/elf_lib/elf_adress.c
+
+FUNC	=	src/function/function_init.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)	\
-			$(ELFLIB)
+			$(ELFLIB)	\
+			$(FUNC)
 
 RM 		= 	rm -f
 
@@ -36,6 +39,7 @@ T_FILES	=	tests/ftrace_tests.c			\
 
 SRC_T	=	$(FILES)	\
 			$(ELFLIB)	\
+			$(FUNC)		\
 			$(T_FILES)
 
 TFLAGS	=	-lcriterion --coverage
