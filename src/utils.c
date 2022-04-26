@@ -26,7 +26,5 @@ char *dec_to_hex(long long int adress)
 
     new[0] = '\0';
     sprintf(new, "%llx", adress);
-
-    //printf("OLD : %lli, New : %s\n", adress, new);
     return new;
 }

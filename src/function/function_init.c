@@ -65,7 +65,6 @@ char *address)
 
 void destroy_function(function_t *function)
 {
-    //free(function->name);
     free(function->address);
     free(function);
 }

@@ -16,6 +16,7 @@ FILES	=	src/ftrace_start.c 				\
 			src/ftrace_prepare_command.c 	\
 			src/ftrace_prepare_path.c 		\
 			src/ftrace_signals.c 			\
+			src/ftrace_process_rip.c
 
 ELFLIB	=	src/elf_lib/elf_open.c			\
 			src/elf_lib/elf_adress.c

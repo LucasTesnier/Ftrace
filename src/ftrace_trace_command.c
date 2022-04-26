@@ -11,6 +11,7 @@
 #include "ftrace_signals.h"
 #include "function_init.h"
 #include "function_stack.h"
+#include "ftrace_process_rip.h"
 #include "utils.h"
 #include <string.h>
 #include <sys/ptrace.h>
@@ -69,37 +70,17 @@ trace_data_t *trace_data_create(char *command, char **env)
 int ftrace_display_command(trace_data_t *trace_data, elf_info_t *elf_info)
 {
     struct user_regs_struct regs;
-    syscall_t actual_signal;
     int status = 0;
-    function_t *function = NULL;
     f_stack_t *stack = init_function_stack();
+    int ptr = 0;
 
     waitpid(trace_data->pid, &status, 0);
     while (true) {
         next_signal(&status, trace_data->pid, &regs);
-        int temp = ptrace(PTRACE_PEEKTEXT, trace_data->pid, regs.rip, NULL);
-        if ((temp & 0xffff) == 0x050F) {
-            next_signal(&status, trace_data->pid, &regs);
-            fill_actual_signal_with_regs_value(regs, &actual_signal);
-            matching_actual_signal_with_signal_table(&actual_signal);
-            display_actual_signal(actual_signal);
-        }
-        if ((temp & 0xff) == 0xc3 || (temp & 0xff) == 0xcb || (temp & 0xff) == 0xc2 || (temp & 0xff) == 0xca) {
-            if (stack->bottom != NULL) {
-                printf("Leaving function %s\n", pop_last_function(stack));
-            }
-        }
-        if ((temp & 0xff) == 0xE8) {
-            char *a = dec_to_hex(regs.rip + 5 + (temp >> 8));
-            if (strlen(a) == 6) {
-                function = init_function(elf_info, trace_data, a);
-                if (strncmp(function->name, "func_", 5))
-                    printf("Entering function %s at 0x%s\n", function->name, function->address);
-                else
-                    printf("Entering function %s\n", function->name);
-                add_function_stack(stack, function);
-            }
-        }
+        ptr = ptrace(PTRACE_PEEKTEXT, trace_data->pid, regs.rip, NULL);
+        ftrace_is_a_signal(ptr, trace_data, &status);
+        ftrace_is_leave(ptr, stack);
+        ftrace_is_call(ptr, trace_data, elf_info, stack);
         if (WIFEXITED(status) || WIFSIGNALED(status))
             break;
     }
