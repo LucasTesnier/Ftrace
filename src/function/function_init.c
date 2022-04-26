@@ -10,18 +10,37 @@
 #include <string.h>
 #include <stdlib.h>
 
+char *get_project_name(char *path)
+{
+    char *new_name = malloc(sizeof(char) * strlen(path));
+    int pos = 0;
+
+    for (int i = 0; i < strlen(path); i++)
+        if (path[i] == '/')
+            pos = i;
+    new_name[0] = '\0';
+    strcat(new_name, path + pos + 1);
+    return new_name;
+}
+
 char *create_unknown_name(trace_data_t *trace_data, char *address)
 {
     char *new_name = malloc(sizeof(char) * (6 + strlen(address) +
     strlen(trace_data->raw_command)));
+    char *project_name = get_project_name(trace_data->raw_command);
 
     if (new_name == ERROR_MALLOC)
         return ERROR_MALLOC;
+    if (project_name == ERROR_MALLOC) {
+        free(new_name);
+        return ERROR_MALLOC;
+    }
     new_name[0] = '\0';
     strcat(new_name, "func_");
     strcat(new_name, address);
     strcat(new_name, "@");
-    strcat(new_name, trace_data->raw_command);
+    strcat(new_name, project_name);
+    free(project_name);
     return new_name;
 }
 

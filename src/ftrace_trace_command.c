@@ -93,7 +93,10 @@ int ftrace_display_command(trace_data_t *trace_data, elf_info_t *elf_info)
             char *a = dec_to_hex(regs.rip + 5 + (temp >> 8));
             if (strlen(a) == 6) {
                 function = init_function(elf_info, trace_data, a);
-                printf("Entering function %s at 0x%s\n", function->name, function->address);
+                if (strncmp(function->name, "func_", 5))
+                    printf("Entering function %s at 0x%s\n", function->name, function->address);
+                else
+                    printf("Entering function %s\n", function->name);
                 add_function_stack(stack, function);
             }
         }
