@@ -95,7 +95,7 @@ unsigned long long int get_matching_reg(syscall_t actual_signal, int i)
 */
 void display_actual_signal(syscall_t actual_signal)
 {
-    fprintf(stderr, "%s(", actual_signal.name);
+    fprintf(stderr, "Syscall %s(", actual_signal.name);
     for (int i = 0; i < actual_signal.nb_args; i++) {
         fprintf(stderr, "%#llx", get_matching_reg(actual_signal, i));
         if (i + 1 < actual_signal.nb_args)
