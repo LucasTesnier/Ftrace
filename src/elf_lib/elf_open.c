@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sysexits.h>
+#include <stdio.h>
 
 /**
 *@brief init the ELF info structure

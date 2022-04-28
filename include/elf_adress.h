@@ -20,6 +20,8 @@ typedef struct elf_adress_s {
     GElf_Shdr strtab;
     Elf64_Sym *sym;
     char *str;
+    Elf_Data *data_rel;
+    Elf_Data *data_sym;
 } elf_adress_t;
 
 elf_adress_t *init_elf_adress(elf_info_t *elf_info);

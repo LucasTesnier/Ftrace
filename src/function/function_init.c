@@ -6,9 +6,11 @@
 */
 
 #include "function_init.h"
+#include "function_dynamic.h"
 #include "elf_adress.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 char *get_project_name(char *path)
 {
@@ -53,6 +55,8 @@ char *address)
         return ERROR_MALLOC;
     new_function->address = strdup(address);
     new_function->name = elf_get_name_from_adress(elf_info, address);
+    if (new_function->name == ELF_ADRESS_ERROR)
+        new_function->name = elf_get_dynamic_name(trace_data, address);
     if (new_function->name == ELF_ADRESS_ERROR)
         new_function->name = create_unknown_name(trace_data, address);
     if (new_function->name == ERROR_MALLOC) {
