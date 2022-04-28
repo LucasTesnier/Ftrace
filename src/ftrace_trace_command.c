@@ -12,6 +12,7 @@
 #include "function_init.h"
 #include "function_stack.h"
 #include "ftrace_process_rip.h"
+#include "ftrace_received_signals.h"
 #include "utils.h"
 #include <string.h>
 #include <sys/ptrace.h>
@@ -79,9 +80,10 @@ int ftrace_display_command(trace_data_t *trace_data, elf_info_t *elf_info)
         next_signal(&status, trace_data->pid, &regs);
         ptr = ptrace(PTRACE_PEEKTEXT, trace_data->pid, regs.rip, NULL);
         ftrace_is_a_signal(ptr, trace_data, &status);
+        ftrace_received_a_signal(trace_data, status);
         ftrace_is_leave(ptr, stack);
         ftrace_is_call(ptr, trace_data, elf_info, stack);
-        if (WIFEXITED(status) || WIFSIGNALED(status))
+        if (WIFEXITED(status))
             break;
     }
     destroy_function_stack(stack);
