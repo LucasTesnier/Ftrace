@@ -110,7 +110,7 @@ int ftrace_trace_command(trace_data_t *trace_data, elf_info_t *elf_info)
         execvp(trace_data->raw_command, args);
         return 0;
     } else {
-        ftrace_display_command(trace_data, elf_info);
+        return ftrace_display_command(trace_data, elf_info);
     }
     return 0;
 }
