@@ -24,7 +24,7 @@ static int init_structs(elf_info_t **elf_info, trace_data_t **trace_data,
 char *arg, char **env)
 {
     *trace_data = trace_data_create(arg, env);
-    if (!trace_data)
+    if (!(*trace_data))
         return -1;
     *elf_info = elf_info_init((*trace_data)->complete_command);
     if (*elf_info == NULL) {
