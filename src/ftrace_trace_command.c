@@ -110,7 +110,10 @@ int ftrace_trace_command(trace_data_t *trace_data, elf_info_t *elf_info)
         execvp(trace_data->raw_command, args);
         return 0;
     } else {
-        ftrace_display_command(trace_data, elf_info);
+        int ret = ftrace_display_command(trace_data, elf_info);
+
+        fprintf(stderr, "+++ exited with %d +++\n", ret);
+        return ret;
     }
     return 0;
 }
