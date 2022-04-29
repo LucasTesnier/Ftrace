@@ -27,6 +27,7 @@ char *elf_match_address(char *address, char *path, char *file)
     sprintf(new_path, "%s/%s", path, file);
     elf_info = elf_info_init(new_path);
     if (elf_info != NULL) {
+        printf("path : %s\n", path);
         name = elf_get_name_from_adress(elf_info, address);
         elf_info_destroy(elf_info);
         free(new_path);

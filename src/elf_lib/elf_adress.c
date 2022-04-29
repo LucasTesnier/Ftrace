@@ -73,9 +73,11 @@ size_t shstrndx)
             elf_adress->strtab = shdr;
         if (shdr.sh_type == SHT_RELA && strcmp(name, ".rela.plt") == 0)
             elf_adress->data_rel = elf_getdata(scn, NULL);
-        if (shdr.sh_type == SHT_DYNSYM)
+        if (shdr.sh_type == SHT_DYNSYM) {
             elf_adress->data_sym = elf_getdata(scn, NULL);
-            
+            gelf_getshdr(scn, &elf_adress->scn_sym);
+        }
+
     }
     return ELF_ADRESS_SUCCESS;
 }
@@ -86,17 +88,14 @@ char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress, int p
     GElf_Sym sym;
     char *name = NULL;
 
-    gelf_getrela(elf_adress->data_rel, pos, &rela);
+    gelf_getrela(elf_adress->data_rel, pos - 1, &rela);
+    //printf("Offset : %li, rip : %s\n", rela.r_offset, adress);
     if (rela.r_offset == 0)
         return name;
-    gelf_getsym(elf_adress->data_sym, GELF_R_SYM(rela.r_info), &sym);
-    /*if (sym.st_info != STT_SECTION &&
-            sym.st_info != STT_FILE && hex_to_dec(adress) ==
-            sym.st_value &&
-            ((char *)(elf_adress->str + sym.st_name))[0] != '.')
-            name = elf_adress->str + sym.st_name;*/
-    if (sym.st_value != 0)
-        printf("Adresse : %li, offset : %li\n", sym.st_value, rela.r_offset);
+    if (!gelf_getsym(elf_adress->data_sym, GELF_R_SYM(rela.r_info), &sym))
+        return name;
+    return elf_strptr(elf_info->elf_file, elf_adress->scn_sym.sh_link, sym.st_name);
+    printf("Name : %i, offset : %li, r_sym : %li, milieu : %i\n", sym.st_name, rela.r_offset, GELF_R_SYM(rela.r_info), elf_adress->scn_sym.sh_link);
     return name;
 }
 
@@ -121,14 +120,13 @@ char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress)
     elf_adress->str = (char *) (elf_info->buf + elf_adress->strtab.sh_offset);
     for (size_t i = 1; i < elf_adress->symtab.sh_size /
     elf_adress->symtab.sh_entsize; i++) {
-        name = elf_get_name_dynamic(elf_info, elf_adress, i, adress);
         if (elf_adress->sym[i].st_info != STT_SECTION &&
             elf_adress->sym[i].st_info != STT_FILE && hex_to_dec(adress) ==
             elf_adress->sym[i].st_value &&
             ((char *)(elf_adress->str + elf_adress->sym[i].st_name))[0] != '.')
             name = elf_adress->str + elf_adress->sym[i].st_name;
-        if (name != NULL)
-            break;
     }
+    if (name == NULL)
+        return elf_get_name_dynamic(elf_info, elf_adress, 1, adress);
     return name;
 }

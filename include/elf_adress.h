@@ -22,6 +22,7 @@ typedef struct elf_adress_s {
     char *str;
     Elf_Data *data_rel;
     Elf_Data *data_sym;
+    GElf_Shdr scn_sym;
 } elf_adress_t;
 
 elf_adress_t *init_elf_adress(elf_info_t *elf_info);
