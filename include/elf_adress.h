@@ -28,6 +28,7 @@ typedef struct elf_adress_s {
 elf_adress_t *init_elf_adress(elf_info_t *elf_info);
 int fill_elf_adress(elf_info_t *elf_info, elf_adress_t *elf_adress,
 size_t shstrndx);
-char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress, unsigned long rip);
+char *elf_get_name_from_adress(elf_info_t *elf_info,
+char *adress, unsigned long rip);
 
 #endif /* !ELF_ADRESS_H_ */
