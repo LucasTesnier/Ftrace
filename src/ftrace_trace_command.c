@@ -30,6 +30,7 @@
 */
 void trace_data_destroy(trace_data_t *trace_data)
 {
+    (void)tab;
     if (trace_data->raw_command)
         free(trace_data->raw_command);
     if (trace_data->complete_command)
@@ -75,14 +76,14 @@ int ftrace_display_command(trace_data_t *trace_data, elf_info_t *elf_info)
     f_stack_t *stack = init_function_stack();
     int ptr = 0;
 
-    (void)tab;
     waitpid(trace_data->pid, &status, 0);
     while (true) {
         next_signal(&status, trace_data->pid, &regs);
         ptr = ptrace(PTRACE_PEEKTEXT, trace_data->pid, regs.rip, NULL);
         ftrace_is_a_signal(ptr, trace_data, &status);
-        ftrace_received_a_signal(trace_data, status);
         ftrace_is_leave(ptr, stack);
+        ftrace_received_a_signal(trace_data, status);
+        ftrace_is_main(ptr, trace_data, elf_info, stack);
         ftrace_is_call(ptr, trace_data, elf_info, stack);
         if (WIFEXITED(status))
             break;

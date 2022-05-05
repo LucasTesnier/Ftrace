@@ -64,3 +64,23 @@ f_stack_t *stack)
         add_function_stack(stack, function);
     }
 }
+
+void ftrace_is_main(int ptr, trace_data_t *trace_data, elf_info_t *elf_info,
+f_stack_t *stack)
+{
+    function_t *function = NULL;
+    struct user_regs_struct regs;
+    char *address = NULL;
+
+    if (((ptr >> 3) & 0b111) != 2)
+        return;
+    ptrace(PTRACE_GETREGS, trace_data->pid, NULL, &regs);
+    address = dec_to_hex(regs.rip);
+    if (strlen(address) != 6)
+        return;
+    function = init_function(elf_info, trace_data, address);
+    if (strncmp(function->name, "func_", 5))
+        printf("Entering function %s at 0x%s\n", function->name,
+        function->address);
+    add_function_stack(stack, function);
+}
