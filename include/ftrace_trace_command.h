@@ -12,11 +12,13 @@
 
     #include <sys/types.h>
     #include <stdlib.h>
+    #include <stdbool.h>
 
 typedef struct trace_data_s {
     char *raw_command;
     char *complete_command;
     pid_t pid;
+    bool have_main;
 } trace_data_t;
 
 void trace_data_destroy(trace_data_t *trace_data);

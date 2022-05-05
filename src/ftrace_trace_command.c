@@ -60,6 +60,7 @@ trace_data_t *trace_data_create(char *command, char **env)
         free(trace_data);
         return NULL;
     }
+    trace_data->have_main = false;
     return trace_data;
 }
 
