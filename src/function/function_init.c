@@ -6,7 +6,6 @@
 */
 
 #include "function_init.h"
-#include "function_dynamic.h"
 #include "elf_adress.h"
 #include <string.h>
 #include "utils.h"

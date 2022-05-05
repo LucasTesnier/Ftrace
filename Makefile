@@ -22,8 +22,7 @@ ELFLIB	=	src/elf_lib/elf_open.c			\
 			src/elf_lib/elf_adress.c
 
 FUNC	=	src/function/function_init.c	\
-			src/function/function_stack.c	\
-			src/function/function_dynamic.c
+			src/function/function_stack.c
 
 SRC 	=	$(MAIN)		\
 			$(FILES)	\
