@@ -82,15 +82,15 @@ size_t shstrndx)
     return ELF_ADRESS_SUCCESS;
 }
 
-char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress, int pos, char *adress)
+char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress, int pos, unsigned long rip)
 {
     GElf_Rela rela;
     GElf_Sym sym;
     char *name = NULL;
 
     gelf_getrela(elf_adress->data_rel, pos - 1, &rela);
-    //printf("Offset : %li, rip : %s\n", rela.r_offset, adress);
-    if (rela.r_offset == 0)
+    //printf("Offset : %li, rip : %li\n", rela.r_offset, rip);
+    if (rela.r_offset != rip)
         return name;
     if (!gelf_getsym(elf_adress->data_sym, GELF_R_SYM(rela.r_info), &sym))
         return name;
@@ -106,7 +106,7 @@ char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress, int p
 *@param adress
 *@return char*
 */
-char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress)
+char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress, unsigned long rip)
 {
     elf_adress_t *elf_adress = init_elf_adress(elf_info);
     char *name = NULL;
@@ -125,8 +125,8 @@ char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress)
             elf_adress->sym[i].st_value &&
             ((char *)(elf_adress->str + elf_adress->sym[i].st_name))[0] != '.')
             name = elf_adress->str + elf_adress->sym[i].st_name;
+        if (name == NULL)
+            name = elf_get_name_dynamic(elf_info, elf_adress, i, rip);
     }
-    if (name == NULL)
-        return elf_get_name_dynamic(elf_info, elf_adress, 1, adress);
     return name;
 }
