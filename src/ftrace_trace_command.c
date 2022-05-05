@@ -75,6 +75,7 @@ int ftrace_display_command(trace_data_t *trace_data, elf_info_t *elf_info)
     f_stack_t *stack = init_function_stack();
     int ptr = 0;
 
+    (void)tab;
     waitpid(trace_data->pid, &status, 0);
     while (true) {
         next_signal(&status, trace_data->pid, &regs);
