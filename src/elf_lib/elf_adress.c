@@ -42,6 +42,14 @@ elf_adress_t *init_elf_adress(elf_info_t *elf_info)
     return elf_adress;
 }
 
+void fill_elf_tab(char *name, elf_adress_t *elf_adress, GElf_Shdr shdr)
+{
+    if (strcmp(name, ".symtab") == 0)
+        elf_adress->symtab = shdr;
+    if (strcmp(name, ".strtab") == 0)
+        elf_adress->strtab = shdr;
+}
+
 /**
 *@brief fill the elf adress structure (match the str and sym tab)
 *
@@ -58,45 +66,36 @@ size_t shstrndx)
     char *name = NULL;
 
     while ((scn = elf_nextscn(elf_info->elf_file, scn)) != NULL) {
-        if (gelf_getshdr(scn, &shdr) != &shdr) {
-            errx(EX_SOFTWARE, "getshdr() failed: %s.", elf_errmsg(-1));
+        if (gelf_getshdr(scn, &shdr) != &shdr)
             return ELF_ADRESS_FAIL;
-        }
         if ((name = elf_strptr(elf_info->elf_file,
-        shstrndx, shdr.sh_name)) == NULL) {
-            errx(EX_SOFTWARE, "elf_strptr() failed: %s.", elf_errmsg(-1));
+            shstrndx, shdr.sh_name)) == NULL)
             return ELF_ADRESS_FAIL;
-        }
-        if (strcmp(name, ".symtab") == 0)
-            elf_adress->symtab = shdr;
-        if (strcmp(name, ".strtab") == 0)
-            elf_adress->strtab = shdr;
+        fill_elf_tab(name, elf_adress, shdr);
         if (shdr.sh_type == SHT_RELA && strcmp(name, ".rela.plt") == 0)
             elf_adress->data_rel = elf_getdata(scn, NULL);
         if (shdr.sh_type == SHT_DYNSYM) {
             elf_adress->data_sym = elf_getdata(scn, NULL);
             gelf_getshdr(scn, &elf_adress->scn_sym);
         }
-
     }
     return ELF_ADRESS_SUCCESS;
 }
 
-char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress, int pos, unsigned long rip)
+char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress,
+int pos, unsigned long rip)
 {
     GElf_Rela rela;
     GElf_Sym sym;
     char *name = NULL;
 
     gelf_getrela(elf_adress->data_rel, pos - 1, &rela);
-    //printf("Offset : %li, rip : %li\n", rela.r_offset, rip);
     if (rela.r_offset != rip)
         return name;
     if (!gelf_getsym(elf_adress->data_sym, GELF_R_SYM(rela.r_info), &sym))
         return name;
-    return elf_strptr(elf_info->elf_file, elf_adress->scn_sym.sh_link, sym.st_name);
-    printf("Name : %i, offset : %li, r_sym : %li, milieu : %i\n", sym.st_name, rela.r_offset, GELF_R_SYM(rela.r_info), elf_adress->scn_sym.sh_link);
-    return name;
+    return elf_strptr(elf_info->elf_file, elf_adress->scn_sym.sh_link,
+        sym.st_name);
 }
 
 /**
@@ -106,14 +105,14 @@ char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress, int p
 *@param adress
 *@return char*
 */
-char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress, unsigned long rip)
+char *elf_get_name_from_adress(elf_info_t *elf_info, char *adress,
+unsigned long rip)
 {
     elf_adress_t *elf_adress = init_elf_adress(elf_info);
     char *name = NULL;
 
-    if (elf_adress == ELF_ADRESS_ERROR)
-        return ELF_ADRESS_ERROR;
-    if (!elf_adress->symtab.sh_size || !elf_adress->strtab.sh_size)
+    if (elf_adress == ELF_ADRESS_ERROR || !elf_adress->symtab.sh_size
+        || !elf_adress->strtab.sh_size)
         return ELF_ADRESS_ERROR;
     elf_adress->sym = (Elf64_Sym *) (elf_info->buf +
     elf_adress->symtab.sh_offset);

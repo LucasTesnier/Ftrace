@@ -55,12 +55,14 @@ function_t *init_function(elf_info_t *elf_info, trace_data_t *trace_data,
 char *address)
 {
     function_t *new_function = malloc(sizeof(function_t) * 1);
-    long offset = ptrace(PTRACE_PEEKTEXT, trace_data->pid, hex_to_dec(address) + 2);
+    long offset = ptrace(PTRACE_PEEKTEXT, trace_data->pid,
+    hex_to_dec(address) + 2);
 
     if (new_function == ERROR_MALLOC)
         return ERROR_MALLOC;
     new_function->address = strdup(address);
-    new_function->name = elf_get_name_from_adress(elf_info, address, (offset & 0xFFFFFFFF) + hex_to_dec(address) + 6);
+    new_function->name = elf_get_name_from_adress(elf_info, address,
+    (offset & 0xFFFFFFFF) + hex_to_dec(address) + 6);
     if (new_function->name == ELF_ADRESS_ERROR)
         new_function->name = create_unknown_name(trace_data, address);
     if (new_function->name == ERROR_MALLOC) {
