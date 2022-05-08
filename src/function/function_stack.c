@@ -9,6 +9,11 @@
 #include <string.h>
 #include <stdio.h>
 
+/**
+*@brief init the function stack object
+*
+*@return f_stack_t*
+*/
 f_stack_t *init_function_stack(void)
 {
     f_stack_t *new_stack = malloc(sizeof(f_stack_t) * 1);
@@ -19,6 +24,12 @@ f_stack_t *init_function_stack(void)
     return new_stack;
 }
 
+/**
+*@brief add a function in the stack
+*
+*@param stack
+*@param function
+*/
 void add_function_stack(f_stack_t *stack, function_t *function)
 {
     node_t *new = malloc(sizeof(node_t) * 1);
@@ -37,6 +48,12 @@ void add_function_stack(f_stack_t *stack, function_t *function)
     ptr->prev = new;
 }
 
+/**
+*@brief pop the last function in the stack
+*
+*@param stack
+*@return char*
+*/
 char *pop_last_function(f_stack_t *stack)
 {
     node_t *ptr = stack->bottom;
@@ -61,6 +78,11 @@ char *pop_last_function(f_stack_t *stack)
     return save;
 }
 
+/**
+*@brief destroy a node
+*
+*@param node
+*/
 void destroy_node(node_t *node)
 {
     destroy_function(node->function);
@@ -69,6 +91,11 @@ void destroy_node(node_t *node)
     free(node);
 }
 
+/**
+*@brief destroy the stack object
+*
+*@param stack
+*/
 void destroy_function_stack(f_stack_t *stack)
 {
     if (stack->bottom != NULL)

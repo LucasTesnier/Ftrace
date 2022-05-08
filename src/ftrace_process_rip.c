@@ -19,6 +19,13 @@
 #include <sys/wait.h>
 #include <sys/user.h>
 
+/**
+*@brief hold the signal process
+*
+*@param ptr
+*@param trace_data
+*@param status
+*/
 void ftrace_is_a_signal(int ptr, trace_data_t *trace_data, int *status)
 {
     struct user_regs_struct regs;
@@ -33,6 +40,12 @@ void ftrace_is_a_signal(int ptr, trace_data_t *trace_data, int *status)
     }
 }
 
+/**
+*@brief hold the leave process
+*
+*@param ptr
+*@param stack
+*/
 void ftrace_is_leave(int ptr, f_stack_t *stack)
 {
     if ((ptr & 0xff) == 0xc3 || (ptr & 0xff) == 0xcb ||
@@ -43,6 +56,14 @@ void ftrace_is_leave(int ptr, f_stack_t *stack)
     }
 }
 
+/**
+*@brief hold the call process
+*
+*@param ptr
+*@param trace_data
+*@param elf_info
+*@param stack
+*/
 void ftrace_is_call(int ptr, trace_data_t *trace_data, elf_info_t *elf_info,
 f_stack_t *stack)
 {
@@ -65,6 +86,14 @@ f_stack_t *stack)
     }
 }
 
+/**
+*@brief hold the main process
+*
+*@param ptr
+*@param trace_data
+*@param elf_info
+*@param stack
+*/
 void ftrace_is_main(int ptr, trace_data_t *trace_data, elf_info_t *elf_info,
 f_stack_t *stack)
 {

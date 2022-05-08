@@ -42,6 +42,13 @@ elf_adress_t *init_elf_adress(elf_info_t *elf_info)
     return elf_adress;
 }
 
+/**
+*@brief fill the elf tab
+*
+*@param name
+*@param elf_adress
+*@param shdr
+*/
 void fill_elf_tab(char *name, elf_adress_t *elf_adress, GElf_Shdr shdr)
 {
     if (strcmp(name, ".symtab") == 0)
@@ -82,6 +89,15 @@ size_t shstrndx)
     return ELF_ADRESS_SUCCESS;
 }
 
+/**
+*@brief elf get the dynamic table
+*
+*@param elf_info
+*@param elf_adress
+*@param pos
+*@param rip
+*@return char*
+*/
 char *elf_get_name_dynamic(elf_info_t *elf_info, elf_adress_t *elf_adress,
 int pos, unsigned long rip)
 {

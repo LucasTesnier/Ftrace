@@ -16,6 +16,12 @@
 #include <sys/types.h>
 #include <sys/user.h>
 
+/**
+*@brief Get the project name object
+*
+*@param path
+*@return char*
+*/
 char *get_project_name(char *path)
 {
     char *new_name = malloc(sizeof(char) * strlen(path));
@@ -29,6 +35,13 @@ char *get_project_name(char *path)
     return new_name;
 }
 
+/**
+*@brief Create a unknown name object
+*
+*@param trace_data
+*@param address
+*@return char*
+*/
 char *create_unknown_name(trace_data_t *trace_data, char *address)
 {
     char *new_name = malloc(sizeof(char) * (6 + strlen(address) +
@@ -50,6 +63,14 @@ char *create_unknown_name(trace_data_t *trace_data, char *address)
     return new_name;
 }
 
+/**
+*@brief init the function object
+*
+*@param elf_info
+*@param trace_data
+*@param address
+*@return function_t*
+*/
 function_t *init_function(elf_info_t *elf_info, trace_data_t *trace_data,
 char *address)
 {
@@ -72,6 +93,11 @@ char *address)
     return new_function;
 }
 
+/**
+*@brief destroy the function object
+*
+*@param function
+*/
 void destroy_function(function_t *function)
 {
     free(function->address);

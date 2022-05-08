@@ -20,6 +20,12 @@ int hex_to_dec(char *adress)
     return ((int)strtol(adress, NULL, 16));
 }
 
+/**
+*@brief convert decimal to hexadecimal form
+*
+*@param adress
+*@return char*
+*/
 char *dec_to_hex(long long int adress)
 {
     char *new = malloc(sizeof(char) * 18);

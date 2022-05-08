@@ -9,6 +9,12 @@
 #include <signal.h>
 #include <wait.h>
 
+/**
+*@brief Get the signal value object
+*
+*@param sig_value
+*@return const char*
+*/
 const static char *get_signal_value(int sig_value)
 {
     return tab[sig_value - 1];
